@@ -181,3 +181,23 @@ Stage Summary:
 - Frontend reorganized into horizontal, professional layouts across Menu, Filosofia, and a new Trust Bar
 - Fully responsive: horizontal on desktop, gracefully stacked on mobile
 - Suitable for presenting/selling to a client; lint clean, no errors
+
+---
+Task ID: 8
+Agent: Main (Z.ai Code)
+Task: Remove the green trust/credibility bar (4-item highlight strip below hero)
+
+Work Log:
+- User sent screenshot confirming the bar to remove was the green TrustBar (Avaliado no Google / 100% Orgânicos / Almoço todo dia / Teodoro Sampaio) added in Task 7
+- Removed `<TrustBar />` and its import from src/app/page.tsx — hero now flows directly into the Menu section
+- Deleted the now-unused component file src/components/bio-cafe/trust-bar.tsx
+
+Verification:
+- `bun run lint`: passes clean (0 errors)
+- No console errors
+- DOM check: hero's nextElementSibling is now <section id="menu"> (not the trust bar); hasAvaliadoGoogle=false
+- VLM: "There is no solid green band containing 4 items... the green visible are only the small badges inside the hero"
+- Server: HTTP 200
+
+Stage Summary:
+- Green credibility bar removed; hero flows directly into menu; menu and filosofia horizontal redesigns from Task 7 retained
