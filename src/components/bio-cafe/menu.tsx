@@ -5,7 +5,6 @@ import { Leaf, Sprout, Wheat, Coffee, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Card, CardContent } from "@/components/ui/card";
 import { whatsappLink } from "@/lib/site";
 
 type Dietary = "vegano" | "vegetariano" | "sem-gluten" | "sem-lactose";
@@ -29,7 +28,7 @@ const pratos: Dish[] = [
   {
     name: "Bowl Bio da Casa",
     description:
-      "Quinoa, grão-de-bico assado, batata-doce, abacate, kale e tomate-cereja com finalizado de tahine.",
+      "Quinoa, grão-de-bico assado, batata-doce, abacate, kale e tomate-cereja finalizado com tahine.",
     price: "R$ 34",
     image: "/images/menu-buddha-bowl.png",
     dietary: ["vegano", "sem-gluten"],
@@ -42,9 +41,6 @@ const pratos: Dish[] = [
     image: "/images/menu-quinoa-salad.png",
     dietary: ["vegano", "sem-gluten", "sem-lactose"],
   },
-];
-
-const vegetarianos: Dish[] = [
   {
     name: "Sanduíche Natural",
     description:
@@ -91,25 +87,34 @@ const dietaryIcon: Record<Dietary, React.ElementType> = {
 
 function DishCard({ dish }: { dish: Dish }) {
   return (
-    <Card className="group overflow-hidden border-border/70 hover:border-primary/40 hover:shadow-lg transition-all duration-300 bg-card">
-      <div className="relative aspect-[4/3] overflow-hidden">
+    <article className="group flex flex-col sm:flex-row overflow-hidden rounded-2xl border border-border/70 bg-card hover:border-primary/40 hover:shadow-lg transition-all duration-300">
+      {/* Image */}
+      <div className="relative w-full sm:w-2/5 aspect-[4/3] sm:aspect-auto sm:min-h-[200px] overflow-hidden flex-shrink-0">
         <Image
           src={dish.image}
           alt={dish.name}
           fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          sizes="(max-width: 640px) 100vw, 40vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="absolute top-3 right-3">
-          <span className="inline-flex items-center justify-center rounded-full bg-background/95 backdrop-blur px-3 py-1 text-sm font-semibold text-primary shadow-sm">
+      </div>
+
+      {/* Content */}
+      <div className="flex flex-col flex-1 p-5 sm:p-6">
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="font-serif text-xl sm:text-2xl font-semibold leading-snug">
+            {dish.name}
+          </h3>
+          <span className="flex-shrink-0 inline-flex items-center justify-center rounded-full bg-primary/10 px-3.5 py-1 text-base font-semibold text-primary whitespace-nowrap">
             {dish.price}
           </span>
         </div>
-      </div>
-      <CardContent className="p-5">
-        <h3 className="font-serif text-xl font-semibold leading-snug">{dish.name}</h3>
-        <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{dish.description}</p>
-        <div className="mt-4 flex flex-wrap gap-2">
+
+        <p className="mt-2.5 text-sm sm:text-[15px] text-muted-foreground leading-relaxed">
+          {dish.description}
+        </p>
+
+        <div className="mt-auto pt-4 flex flex-wrap items-center gap-2">
           {dish.dietary.map((d) => {
             const Icon = dietaryIcon[d];
             return (
@@ -124,14 +129,14 @@ function DishCard({ dish }: { dish: Dish }) {
             );
           })}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </article>
   );
 }
 
 function DishGrid({ items }: { items: Dish[] }) {
   return (
-    <div className="grid gap-6 sm:grid-cols-2">
+    <div className="grid gap-5 lg:grid-cols-2">
       {items.map((dish) => (
         <DishCard key={dish.name} dish={dish} />
       ))}
@@ -158,33 +163,27 @@ export function MenuSection() {
         </div>
 
         <Tabs defaultValue="pratos" className="mt-10 sm:mt-14 w-full">
-          <TabsList className="grid w-full max-w-xl mx-auto grid-cols-3 h-auto rounded-full bg-secondary p-1.5">
+          <TabsList className="grid w-full max-w-xl mx-auto grid-cols-2 h-auto rounded-full bg-secondary p-1.5">
             <TabsTrigger value="pratos" className="rounded-full py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm">
-              Pratos do Dia
-            </TabsTrigger>
-            <TabsTrigger value="vegetarianos" className="rounded-full py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm">
-              Veg & Veganos
+              Pratos & Lanches
             </TabsTrigger>
             <TabsTrigger value="bebidas" className="rounded-full py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm">
-              Bebidas
+              Bebidas & Cafés
             </TabsTrigger>
           </TabsList>
           <TabsContent value="pratos" className="mt-8 sm:mt-10 focus-visible:outline-none">
             <DishGrid items={pratos} />
-          </TabsContent>
-          <TabsContent value="vegetarianos" className="mt-8 sm:mt-10 focus-visible:outline-none">
-            <DishGrid items={vegetarianos} />
           </TabsContent>
           <TabsContent value="bebidas" className="mt-8 sm:mt-10 focus-visible:outline-none">
             <DishGrid items={bebidas} />
           </TabsContent>
         </Tabs>
 
-        <div className="mt-12 text-center">
-          <p className="text-sm text-muted-foreground">
+        <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
+          <p className="text-sm text-muted-foreground max-w-md">
             O cardápio do dia muda diariamente. Consulte as opções de hoje direto no WhatsApp.
           </p>
-          <Button asChild size="lg" className="mt-4 rounded-full">
+          <Button asChild size="lg" className="rounded-full whitespace-nowrap flex-shrink-0">
             <a
               href={whatsappLink("Olá! Gostaria de ver o cardápio do dia do Bio Café & Co.")}
               target="_blank"

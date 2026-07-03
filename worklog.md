@@ -154,3 +154,30 @@ Verification:
 
 Stage Summary:
 - Developer credit added to footer, verified clean
+
+---
+Task ID: 7
+Agent: Main (Z.ai Code)
+Task: Make frontend more organized, horizontal, professional (for selling to a client)
+
+Work Log:
+- Menu redesign (menu.tsx): vertical image-on-top cards → HORIZONTAL cards (photo left ~40%, details right with price in green badge top-right). Merged the 3 tabs into 2 (Pratos & Lances / Bebidas & Cafés) and consolidated 4 items + 2 drinks for a balanced 2-col grid of horizontal cards. mt-auto pushes badges to bottom for aligned rows. CTA row now horizontal (text + button side-by-side).
+- Filosofia redesign (filosofia.tsx): the 3 pillars were stacked in a single column → now a HORIZONTAL row of 3 cards below the image+intro. Added a 3-column stats strip (100% / 0 agrotóxicos / Diário) inline with the intro text. Image aspect changed to 4/3. Overall section reads horizontally.
+- Trust bar (new trust-bar.tsx): horizontal green strip between hero and menu with 4 highlights in a row (Avaliado no Google / 100% Orgânicos / Almoço todo dia / Teodoro Sampaio), each icon+title+subtitle. Responsive 2x2 on mobile via grid-cols-2 lg:grid-cols-4 with divide-x.
+- Inserted <TrustBar/> in page.tsx between Hero and MenuSection.
+
+Verification (lint + Agent Browser + VLM):
+- `bun run lint`: passes clean (0 errors)
+- No page errors on desktop or mobile
+- VLM Trust bar (desktop): "horizontal green bar with four icon+text highlight items in a row"
+- VLM Menu (desktop): "dish cards laid out horizontally with photo on left, text on right, price clearly visible in green badge... clean, organized, professional"
+- VLM Filosofia (desktop): "3 value pillars in a horizontal row of 3... stats strip with 3 numbers... clean and professional, cohesive design and clear visual hierarchy"
+- VLM Mobile trust bar (390px): "stacks neatly into a 2x2 grid... icons and text clearly readable"
+- VLM Mobile menu (390px): "horizontal cards stack vertically (image on top, details below)... clean layout, well-spaced, readable"
+- VLM Mobile filosofia (390px): "3 pillar cards stack vertically on mobile and remain readable... sufficient spacing and legible typography"
+- Server: HTTP 200
+
+Stage Summary:
+- Frontend reorganized into horizontal, professional layouts across Menu, Filosofia, and a new Trust Bar
+- Fully responsive: horizontal on desktop, gracefully stacked on mobile
+- Suitable for presenting/selling to a client; lint clean, no errors

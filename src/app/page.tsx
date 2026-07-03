@@ -1,5 +1,6 @@
 import { Header } from "@/components/bio-cafe/header";
 import { Hero } from "@/components/bio-cafe/hero";
+import { TrustBar } from "@/components/bio-cafe/trust-bar";
 import { MenuSection } from "@/components/bio-cafe/menu";
 import { FilosofiaSection } from "@/components/bio-cafe/filosofia";
 import { GaleriaSection } from "@/components/bio-cafe/galeria";
@@ -14,6 +15,7 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero />
+        <TrustBar />
         <MenuSection />
         <FilosofiaSection />
         <GaleriaSection />
