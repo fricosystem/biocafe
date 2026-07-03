@@ -24,8 +24,12 @@ export function Hero() {
           sizes="100vw"
           className="object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/80 via-emerald-900/50 to-black/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10" />
+        {/* Dark base layer for guaranteed contrast */}
+        <div className="absolute inset-0 bg-black/55" />
+        {/* Stronger darkening on the left where the text sits */}
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/90 via-emerald-950/65 to-black/40" />
+        {/* Bottom fade for depth */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-black/25" />
       </div>
 
       <div className="relative z-10 container mx-auto max-w-6xl px-4 sm:px-6 pt-24 pb-16 sm:pt-28 sm:pb-20">

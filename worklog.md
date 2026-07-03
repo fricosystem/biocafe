@@ -201,3 +201,26 @@ Verification:
 
 Stage Summary:
 - Green credibility bar removed; hero flows directly into menu; menu and filosofia horizontal redesigns from Task 7 retained
+
+---
+Task ID: 9
+Agent: Main (Z.ai Code)
+Task: Increase hero background darkening for better text contrast (text was hard to read)
+
+Work Log:
+- User reported the hero presentation text was hard to read against the background photo
+- Root cause: the previous overlays (emerald-950/80 -> emerald-900/50 -> black/40, plus a bottom black/55) left the center region around ~50% darkening — insufficient where the headline sits
+- Fix in hero.tsx: replaced the two overlay layers with three stronger layers:
+  1. Solid base `bg-black/55` (guaranteed floor of darkness across the whole image)
+  2. Horizontal gradient `from-emerald-950/90 via-emerald-950/65 to-black/40` (left side, where text sits, is darkest ~90%; tapers right)
+  3. Vertical bottom fade `from-black/65 via-transparent to-black/25` (depth + readable scroll cue)
+- Net effect: text region now sits over ~85% darkening instead of ~50%
+
+Verification:
+- `bun run lint`: passes clean
+- VLM desktop: "headline highly readable, 9/10 contrast... background significantly darkened... paragraph text readable"
+- VLM mobile (390px): "headline clearly readable... background sufficiently darkened... text stands out"
+- Server: HTTP 200
+
+Stage Summary:
+- Hero contrast fixed via stronger 3-layer dark overlay; text now clearly readable on desktop and mobile
