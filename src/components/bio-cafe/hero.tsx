@@ -17,15 +17,15 @@ export function Hero() {
       {/* Background image */}
       <div className="absolute inset-0">
         <Image
-          src="/images/hero.png"
-          alt="Interior claro e arejado do Bio Café & Co. com pratos saudáveis"
+          src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAFNqystoLssndrmtuu4h1BWuI0xRIIB-L645hZCVdMojcvDrbFJ22scDMdR87hG4udmMPZN-UOvMGmQEY9p48dJ8DmLu4MMOMoYFxP32sAyGCpgJqLDJMCaNoIUBQ2DwbaBvBwZDg=w1080-h1920-k-no"
+          alt="Fachada e ambiente do Bio Café & Co. em Pinheiros, São Paulo"
           fill
           priority
           sizes="100vw"
-          className="object-cover"
+          className="object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/75 via-emerald-900/45 to-black/30" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/80 via-emerald-900/50 to-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10" />
       </div>
 
       <div className="relative z-10 container mx-auto max-w-6xl px-4 sm:px-6 pt-24 pb-16 sm:pt-28 sm:pb-20">

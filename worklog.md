@@ -74,3 +74,30 @@ Stage Summary:
 - Dev server running persistently via start-stop-daemon on port 3000 (HTTP 200)
 - All requested sections present: Menu Saudavel, Filosofia Bio, Galeria, Localizacao e Horario, Contato (form + WhatsApp), CTAs
 - Design: light/airy green natural theme, Fraunces serif headings, 11 AI-generated food/ambiance images
+
+---
+Task ID: 4
+Agent: Main (Z.ai Code)
+Task: Fix Radix Sheet hydration mismatch + replace hero image with Google Maps photo
+
+Work Log:
+- Diagnosed hydration error: Radix `Sheet` generates `aria-controls` via React `useId`, producing mismatched IDs (server `radix-_R_11indlb_` vs client `radix-_R_4indlb_`) — a known Next.js 16 + Turbopack + Radix issue
+- Fix in header.tsx: added `mounted` state gate. Before mount (SSR + pre-hydration), render a static placeholder `<span>` (matching size/styling, aria-hidden); after mount, render the full `<Sheet>`. This eliminates the SSR/client ID divergence entirely.
+- Deferred `setMounted(true)` via `requestAnimationFrame` to (a) keep the setState out of the synchronous effect body (satisfies `react-hooks/set-state-in-effect` lint rule) and (b) let the SSR placeholder paint first
+- Replaced hero image: was local `/images/hero.png` (AI-generated), now external Google Maps photo URL provided by user
+  - Used higher-quality variant `=w1080-h1920-k-no` (210KB, 675x1200 after optimization) instead of tiny original `=w203-h360` (32KB) for sharp full-bleed rendering
+  - Added `images.remotePatterns` for `lh3.googleusercontent.com` in next.config.ts (required restart)
+  - Slightly strengthened gradient overlays (emerald-950/80, black/55) to keep white text readable over the real photo
+- Restarted dev server via start-stop-daemon (next.config change requires restart)
+
+Verification:
+- `agent-browser errors`: EMPTY on desktop + mobile, before and after opening menu (hydration mismatch GONE)
+- Console: no "did not match" / "hydration" messages; only HMR info + a benign Dialog Description a11y hint
+- VLM on new hero: "background photo of the cafe's interior is visible... white headline highly readable... CTA buttons and badges clearly visible... professional, cohesive branding"
+- Mobile menu still opens correctly after mounted gate (all nav links + WhatsApp CTA present)
+- `bun run lint`: passes clean (0 errors)
+
+Stage Summary:
+- Hydration mismatch error resolved (Radix useId divergence fixed via mounted gate)
+- Hero now shows the real Bio Café & Co. Google Maps storefront photo
+- Dev server running persistently via start-stop-daemon, HTTP 200, lint clean

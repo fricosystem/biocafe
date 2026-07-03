@@ -18,12 +18,20 @@ const NAV = [
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // Defer to the next frame so the SSR placeholder renders first, avoiding a
+    // Radix useId (aria-controls) hydration mismatch, and to keep the setState
+    // out of the synchronous effect body.
+    const raf = requestAnimationFrame(() => setMounted(true));
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   return (
@@ -93,49 +101,62 @@ export function Header() {
           </div>
 
           {/* Mobile menu */}
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className={`md:hidden ${scrolled ? "" : "text-white hover:bg-white/10 hover:text-white"}`}
-                aria-label="Abrir menu"
-              >
-                <MenuIcon className="size-6" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[340px] p-0">
-              <SheetTitle className="sr-only">Menu de navegação</SheetTitle>
-              <div className="flex flex-col h-full">
-                <div className="flex items-center gap-2 px-6 h-16 border-b border-border">
-                  <span className="flex items-center justify-center size-8 rounded-full bg-primary text-primary-foreground">
-                    <Leaf className="size-4" />
-                  </span>
-                  <span className="font-serif text-base font-semibold">{site.name}</span>
+          {mounted ? (
+            <Sheet open={open} onOpenChange={setOpen}>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={`md:hidden ${scrolled ? "" : "text-white hover:bg-white/10 hover:text-white"}`}
+                  aria-label="Abrir menu"
+                >
+                  <MenuIcon className="size-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[340px] p-0">
+                <SheetTitle className="sr-only">Menu de navegação</SheetTitle>
+                <div className="flex flex-col h-full">
+                  <div className="flex items-center gap-2 px-6 h-16 border-b border-border">
+                    <span className="flex items-center justify-center size-8 rounded-full bg-primary text-primary-foreground">
+                      <Leaf className="size-4" />
+                    </span>
+                    <span className="font-serif text-base font-semibold">{site.name}</span>
+                  </div>
+                  <nav className="flex flex-col p-4 gap-1">
+                    {NAV.map((item) => (
+                      <SheetClose asChild key={item.href}>
+                        <Link
+                          href={item.href}
+                          className="px-4 py-3 rounded-lg text-base font-medium text-foreground/80 hover:text-primary hover:bg-primary/10 transition-colors"
+                        >
+                          {item.label}
+                        </Link>
+                      </SheetClose>
+                    ))}
+                  </nav>
+                  <div className="mt-auto p-4 border-t border-border">
+                    <Button asChild className="w-full rounded-full">
+                      <a href={whatsappLink()} target="_blank" rel="noopener noreferrer">
+                        <MessageCircle className="size-4" />
+                        Pedir no WhatsApp
+                      </a>
+                    </Button>
+                  </div>
                 </div>
-                <nav className="flex flex-col p-4 gap-1">
-                  {NAV.map((item) => (
-                    <SheetClose asChild key={item.href}>
-                      <Link
-                        href={item.href}
-                        className="px-4 py-3 rounded-lg text-base font-medium text-foreground/80 hover:text-primary hover:bg-primary/10 transition-colors"
-                      >
-                        {item.label}
-                      </Link>
-                    </SheetClose>
-                  ))}
-                </nav>
-                <div className="mt-auto p-4 border-t border-border">
-                  <Button asChild className="w-full rounded-full">
-                    <a href={whatsappLink()} target="_blank" rel="noopener noreferrer">
-                      <MessageCircle className="size-4" />
-                      Pedir no WhatsApp
-                    </a>
-                  </Button>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
+              </SheetContent>
+            </Sheet>
+          ) : (
+            // Static placeholder rendered during SSR + before hydration to avoid
+            // Radix useId aria-controls mismatch between server and client.
+            <span
+              className={`md:hidden inline-flex items-center justify-center size-9 ${
+                scrolled ? "" : "text-white"
+              }`}
+              aria-hidden="true"
+            >
+              <MenuIcon className="size-6" />
+            </span>
+          )}
         </div>
       </div>
     </header>
